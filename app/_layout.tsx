@@ -1,59 +1,105 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import React, { useEffect } from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import {
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+  ThemeProvider as NavigationThemeProvider,
+} from "@react-navigation/native";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import { Provider as ReduxProvider } from "react-redux";
+import { useAppDispatch } from "@/redux/hooks";
+import { store } from "@/redux/store";
+import { loadState } from "@/utils/storageUtils";
+import { loginSuccess } from "@/redux/slices/auth";
+import {
+  Provider as PaperProvider,
+  MD3LightTheme as PaperDefaultTheme,
+  MD3DarkTheme as PaperDarkTheme,
+} from "react-native-paper";
+import AuthLayout from "./AuthLayout";
+import { useColorScheme } from "react-native";
 
-import { useColorScheme } from '@/components/useColorScheme';
+export { ErrorBoundary } from "expo-router";
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
-
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+const CombinedDefaultTheme = {
+  ...NavigationDefaultTheme,
+  ...PaperDefaultTheme,
+  colors: {
+    ...NavigationDefaultTheme.colors,
+    ...PaperDefaultTheme.colors,
+    primary: "tomato",
+    secondary: "yellow",
+  },
+};
+
+const CombinedDarkTheme = {
+  ...NavigationDarkTheme,
+  ...PaperDarkTheme,
+  colors: {
+    ...NavigationDarkTheme.colors,
+    ...PaperDarkTheme.colors,
+    primary: "tomato",
+    secondary: "yellow",
+  },
+};
+
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  const [fontsLoaded, error] = useFonts({
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
+    if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [fontsLoaded]);
 
-  if (!loaded) {
+  if (!fontsLoaded) {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <ReduxProvider store={store}>
+      <PaperProvider
+        theme={
+          useColorScheme() === "dark" ? CombinedDarkTheme : CombinedDefaultTheme
+        }
+      >
+        <RootLayoutNav />
+      </PaperProvider>
+    </ReduxProvider>
+  );
 }
 
 function RootLayoutNav() {
+  const dispatch = useAppDispatch();
   const colorScheme = useColorScheme();
+  console.log(colorScheme);
+
+  const retrieveLogin = async () => {
+    const authData = await loadState("auth");
+    if (authData) {
+      dispatch(loginSuccess(authData));
+    }
+  };
+
+  useEffect(() => {
+    retrieveLogin();
+  }, []);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <NavigationThemeProvider
+      value={colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme}
+    >
+      <AuthLayout />
+    </NavigationThemeProvider>
   );
 }
