@@ -11,6 +11,7 @@ import {
 } from "react-native-paper";
 import { useRouter } from "expo-router";
 import { useRegisterMutation } from "@/services/auth/authService";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const RegisterScreen = () => {
   const router = useRouter();
@@ -41,68 +42,70 @@ const RegisterScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Headline style={styles.header}>Register</Headline>
-      <TextInput
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        style={styles.input}
-      />
-      <TextInput
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
-      <Card style={styles.card}>
-        <Card.Content>
-          <Text variant="titleLarge">Role</Text>
-          <View style={styles.radioGroup}>
-            <View style={styles.radioContainer}>
-              <RadioButton
-                value="Patient"
-                status={role === "Patient" ? "checked" : "unchecked"}
-                onPress={() => setRole("Patient")}
-              />
-              <Text style={styles.radioText}>Patient</Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Headline style={styles.header}>Register</Headline>
+        <TextInput
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          style={styles.input}
+        />
+        <TextInput
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          style={styles.input}
+        />
+        <Card style={styles.card}>
+          <Card.Content>
+            <Text variant="titleLarge">Role</Text>
+            <View style={styles.radioGroup}>
+              <View style={styles.radioContainer}>
+                <RadioButton
+                  value="Patient"
+                  status={role === "Patient" ? "checked" : "unchecked"}
+                  onPress={() => setRole("Patient")}
+                />
+                <Text style={styles.radioText}>Patient</Text>
+              </View>
+              <View style={styles.radioContainer}>
+                <RadioButton
+                  value="Clinic"
+                  status={role === "Clinic" ? "checked" : "unchecked"}
+                  onPress={() => setRole("Clinic")}
+                />
+                <Text style={styles.radioText}>Clinic</Text>
+              </View>
             </View>
-            <View style={styles.radioContainer}>
-              <RadioButton
-                value="Clinic"
-                status={role === "Clinic" ? "checked" : "unchecked"}
-                onPress={() => setRole("Clinic")}
-              />
-              <Text style={styles.radioText}>Clinic</Text>
-            </View>
-          </View>
-        </Card.Content>
-      </Card>
-      <Button mode="contained" onPress={handleRegister} style={styles.button}>
-        Register
-      </Button>
-      <Button
-        mode="text"
-        onPress={() => router.push("/login")}
-        style={styles.link}
-      >
-        Go to Login
-      </Button>
+          </Card.Content>
+        </Card>
+        <Button mode="contained" onPress={handleRegister} style={styles.button}>
+          Register
+        </Button>
+        <Button
+          mode="text"
+          onPress={() => router.push("/login")}
+          style={styles.link}
+        >
+          Go to Login
+        </Button>
 
-      {/* Snackbar for error messages */}
-      <Snackbar
-        visible={showError}
-        onDismiss={() => setShowError(false)}
-        action={{
-          label: "Dismiss",
-          onPress: () => setShowError(false),
-        }}
-      >
-        {errorMessage}
-      </Snackbar>
-    </View>
+        {/* Snackbar for error messages */}
+        <Snackbar
+          visible={showError}
+          onDismiss={() => setShowError(false)}
+          action={{
+            label: "Dismiss",
+            onPress: () => setShowError(false),
+          }}
+        >
+          {errorMessage}
+        </Snackbar>
+      </View>
+    </SafeAreaView>
   );
 };
 

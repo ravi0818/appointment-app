@@ -8,7 +8,7 @@ import {
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Provider as ReduxProvider } from "react-redux";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { store } from "@/redux/store";
 import { loadState } from "@/utils/storageUtils";
 import { loginSuccess } from "@/redux/slices/auth";
@@ -17,10 +17,9 @@ import {
   MD3LightTheme as PaperDefaultTheme,
   MD3DarkTheme as PaperDarkTheme,
 } from "react-native-paper";
-import AuthLayout from "./AuthLayout";
 import { useColorScheme } from "react-native";
-
-export { ErrorBoundary } from "expo-router";
+import { Stack, useRouter } from "expo-router";
+import { SafeAreaProvider } from "react-native-safe-area-context"; // Ensure correct import
 
 SplashScreen.preventAutoHideAsync();
 
@@ -52,6 +51,8 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
+  const colorScheme = useColorScheme();
+
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -63,17 +64,25 @@ export default function RootLayout() {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return null;
+    return null; // Splash screen should handle this
   }
 
   return (
     <ReduxProvider store={store}>
       <PaperProvider
         theme={
-          useColorScheme() === "dark" ? CombinedDarkTheme : CombinedDefaultTheme
+          colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme
         }
       >
-        <RootLayoutNav />
+        <NavigationThemeProvider
+          value={
+            colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme
+          }
+        >
+          <SafeAreaProvider>
+            <RootLayoutNav />
+          </SafeAreaProvider>
+        </NavigationThemeProvider>
       </PaperProvider>
     </ReduxProvider>
   );
@@ -81,8 +90,6 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const dispatch = useAppDispatch();
-  const colorScheme = useColorScheme();
-  console.log(colorScheme);
 
   const retrieveLogin = async () => {
     const authData = await loadState("auth");
@@ -95,11 +102,22 @@ function RootLayoutNav() {
     retrieveLogin();
   }, []);
 
+  const isLoggedIn = useAppSelector((state) => state.auth.token);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push("/home");
+    } else {
+      router.push("/login");
+    }
+  }, [isLoggedIn, router]);
+
   return (
-    <NavigationThemeProvider
-      value={colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme}
-    >
-      <AuthLayout />
-    </NavigationThemeProvider>
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(protected)" options={{ headerShown: false }} />
+    </Stack>
   );
 }

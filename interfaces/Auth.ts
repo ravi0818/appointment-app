@@ -16,3 +16,12 @@ export interface ILoginResponse {
 export interface IRegisterResponse {
   message: string;
 }
+
+export interface IUser {
+  email: string;
+  role: string;
+}
+export interface IAuthState {
+  token: string | null;
+  user: IUser | null;
+}
