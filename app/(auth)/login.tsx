@@ -6,6 +6,9 @@ import { useRouter } from "expo-router";
 import { useLoginMutation } from "@/services/auth/authService";
 import { loginSuccess } from "@/redux/slices/auth";
 import { useAuth } from "@/redux/hooks/useAuth";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { jwtDecode } from "jwt-decode";
+import { IUser } from "@/interfaces";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -32,7 +35,17 @@ const LoginScreen = () => {
 
     try {
       const response = await login({ email, password }).unwrap();
-      dispatch(loginSuccess({ token: response.token, user: "Test" }));
+      const decodedToken = jwtDecode(response.token) as IUser;
+      console.log({ decodedToken });
+      dispatch(
+        loginSuccess({
+          token: response.token,
+          user: {
+            email: decodedToken?.email,
+            role: decodedToken?.role,
+          },
+        })
+      );
     } catch (error) {
       setErrorMessage("Login failed. Please try again.");
       setShowError(true);
@@ -40,45 +53,47 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Headline style={styles.header}>Login</Headline>
-      <TextInput
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        style={styles.input}
-      />
-      <TextInput
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
-      <Button mode="contained" onPress={handleLogin} style={styles.button}>
-        Login
-      </Button>
-      <Button
-        mode="text"
-        onPress={() => router.push("/register")}
-        style={styles.link}
-      >
-        Go to Register
-      </Button>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Headline style={styles.header}>Login</Headline>
+        <TextInput
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          style={styles.input}
+        />
+        <TextInput
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          style={styles.input}
+        />
+        <Button mode="contained" onPress={handleLogin} style={styles.button}>
+          Login
+        </Button>
+        <Button
+          mode="text"
+          onPress={() => router.push("/register")}
+          style={styles.link}
+        >
+          Go to Register
+        </Button>
 
-      {/* Snackbar for error messages */}
-      <Snackbar
-        visible={showError}
-        onDismiss={() => setShowError(false)}
-        action={{
-          label: "Dismiss",
-          onPress: () => setShowError(false),
-        }}
-      >
-        {errorMessage}
-      </Snackbar>
-    </View>
+        {/* Snackbar for error messages */}
+        <Snackbar
+          visible={showError}
+          onDismiss={() => setShowError(false)}
+          action={{
+            label: "Dismiss",
+            onPress: () => setShowError(false),
+          }}
+        >
+          {errorMessage}
+        </Snackbar>
+      </View>
+    </SafeAreaView>
   );
 };
 
