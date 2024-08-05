@@ -1,42 +1,37 @@
-import Loader from "@/components/Loader";
-import PatientProfile from "@/components/PatientProfile";
-import { IPatientResponse, IPatientUpdateRequest } from "@/interfaces/Profile";
-import { useAppSelector } from "@/redux/hooks";
-import {
-  useGetPatientProfileQuery,
-  useUpdatePatientProfileMutation,
-} from "@/services/profile/profileService";
-import React, { useEffect, useState } from "react";
-import { View } from "react-native";
-import { Text } from "react-native-paper";
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { Text } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { SafeAreaView } from "react-native-safe-area-context";
+import Loader from '@/components/Loader';
+import PatientProfile from '@/components/PatientProfile';
+import { IPatientResponse, IPatientUpdateRequest } from '@/interfaces/Profile';
+import { useAppSelector } from '@/redux/hooks';
+import { useGetPatientProfileQuery, useUpdatePatientProfileMutation } from '@/services/profile/profileService';
 
 const ProfileScreen = () => {
   const user = useAppSelector((state) => state.auth.user);
-  const { data: userProfileResponseData, isFetching: isUserProfileFetching } =
-    useGetPatientProfileQuery();
+  const { data: userProfileResponseData, isFetching: isUserProfileFetching } = useGetPatientProfileQuery();
 
-  const [updatePatientProfile, { isLoading: isUserProfileUpdating }] =
-    useUpdatePatientProfileMutation();
+  const [updatePatientProfile, { isLoading: isUserProfileUpdating }] = useUpdatePatientProfileMutation();
 
   const [userProfileData, setUserProfileData] = useState<IPatientResponse>({
-    name: "",
+    name: '',
     contacts: {
-      primaryPhone: "",
-      alternativePhone: "",
-      email: "",
+      primaryPhone: '',
+      alternativePhone: '',
+      email: '',
     },
     age: 0,
-    gender: "",
-    address: "",
-    profilePicture: "",
+    gender: '',
+    address: '',
+    profilePicture: '',
   });
 
   const handleUserChange = (field: string, value: string) => {
     setUserProfileData((prevData) => ({
       ...prevData,
-      [field]: field === "age" ? parseInt(value, 10) : value,
+      [field]: field === 'age' ? parseInt(value, 10) : value,
     }));
   };
 
@@ -73,16 +68,11 @@ const ProfileScreen = () => {
     }
   };
 
-  if (
-    isUserProfileFetching ||
-    !userProfileData?.contacts?.email ||
-    isUserProfileUpdating
-  )
-    return <Loader />;
+  if (isUserProfileFetching || !userProfileData?.contacts?.email || isUserProfileUpdating) return <Loader />;
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {user?.role === "Patient" ? (
+      {user?.role === 'Patient' ? (
         <PatientProfile
           userProfileData={userProfileData}
           handleChange={handleUserChange}

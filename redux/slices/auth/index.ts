@@ -1,9 +1,10 @@
 // src/redux/slices/authSlice.ts
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { loadState, saveState } from "@/utils/storageUtils";
-import { IAuthState, IUser } from "@/interfaces";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const AUTH_STATE_KEY = "auth";
+import { IAuthState, IUser } from '@/interfaces';
+import { loadState, saveState } from '@/utils/storageUtils';
+
+const AUTH_STATE_KEY = 'auth';
 
 const initialState: IAuthState = {
   token: null,
@@ -11,7 +12,7 @@ const initialState: IAuthState = {
 };
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState: initialState,
   reducers: {
     loginSuccess(state, action: PayloadAction<{ token: string; user: IUser }>) {

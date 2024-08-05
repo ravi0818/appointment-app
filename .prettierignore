@@ -1,0 +1,15 @@
+# Dependency directories
+/node_modules
+
+# ReactJS Files
+/build
+/public/*
+/src/App.tsx
+/src/App.test.tsx
+
+# storybook build
+/storybook-static
+/stories/*
+/.storybook
+/*.yml
+/*.yaml

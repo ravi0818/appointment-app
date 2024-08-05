@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Alert } from "react-native";
-import { TextInput, Button, Headline, Snackbar } from "react-native-paper";
-import { useDispatch } from "react-redux";
-import { useRouter } from "expo-router";
-import { useLoginMutation } from "@/services/auth/authService";
-import { loginSuccess } from "@/redux/slices/auth";
-import { useAuth } from "@/redux/hooks/useAuth";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { jwtDecode } from "jwt-decode";
-import { IUser } from "@/interfaces";
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Alert } from 'react-native';
+import { TextInput, Button, Headline, Snackbar } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch } from 'react-redux';
+
+import { useRouter } from 'expo-router';
+import { jwtDecode } from 'jwt-decode';
+
+import { IUser } from '@/interfaces';
+import { useAuth } from '@/redux/hooks/useAuth';
+import { loginSuccess } from '@/redux/slices/auth';
+import { useLoginMutation } from '@/services/auth/authService';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -17,18 +19,18 @@ const LoginScreen = () => {
   const isLoggedIn = useAuth();
 
   // Local state for form inputs and error messages
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    if (isLoggedIn) router.push("/home");
+    if (isLoggedIn) router.push('/home');
   }, [isLoggedIn]);
 
   const handleLogin = async () => {
     if (!email || !password) {
-      setErrorMessage("Email and password are required.");
+      setErrorMessage('Email and password are required.');
       setShowError(true);
       return;
     }
@@ -47,7 +49,7 @@ const LoginScreen = () => {
         })
       );
     } catch (error) {
-      setErrorMessage("Login failed. Please try again.");
+      setErrorMessage('Login failed. Please try again.');
       setShowError(true);
     }
   };
@@ -63,21 +65,11 @@ const LoginScreen = () => {
           keyboardType="email-address"
           style={styles.input}
         />
-        <TextInput
-          label="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          style={styles.input}
-        />
+        <TextInput label="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
         <Button mode="contained" onPress={handleLogin} style={styles.button}>
           Login
         </Button>
-        <Button
-          mode="text"
-          onPress={() => router.push("/register")}
-          style={styles.link}
-        >
+        <Button mode="text" onPress={() => router.push('/register')} style={styles.link}>
           Go to Register
         </Button>
 
@@ -86,7 +78,7 @@ const LoginScreen = () => {
           visible={showError}
           onDismiss={() => setShowError(false)}
           action={{
-            label: "Dismiss",
+            label: 'Dismiss',
             onPress: () => setShowError(false),
           }}
         >
@@ -100,12 +92,12 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     padding: 16,
   },
   header: {
     marginBottom: 24,
-    textAlign: "center",
+    textAlign: 'center',
   },
   input: {
     marginBottom: 16,
@@ -115,7 +107,7 @@ const styles = StyleSheet.create({
   },
   link: {
     marginTop: 8,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
 });
 
