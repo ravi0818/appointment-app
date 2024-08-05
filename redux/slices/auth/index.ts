@@ -1,8 +1,7 @@
 // src/redux/slices/authSlice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
 import { IAuthState, IUser } from '@/interfaces';
-import { loadState, saveState } from '@/utils/storageUtils';
+import { saveState } from '@/utils/storageUtils';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const AUTH_STATE_KEY = 'auth';
 

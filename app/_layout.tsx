@@ -8,12 +8,6 @@ import {
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as ReduxProvider } from 'react-redux';
 
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import {
-  DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme,
-  ThemeProvider as NavigationThemeProvider,
-} from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -22,6 +16,12 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { loginSuccess } from '@/redux/slices/auth';
 import { store } from '@/redux/store';
 import { loadState } from '@/utils/storageUtils';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import {
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+  ThemeProvider as NavigationThemeProvider,
+} from '@react-navigation/native';
 
 // Ensure correct import
 

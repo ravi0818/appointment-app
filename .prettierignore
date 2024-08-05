@@ -1,15 +1,31 @@
-# Dependency directories
-/node_modules
+# Ignore node_modules directory
+node_modules/
 
-# ReactJS Files
-/build
-/public/*
-/src/App.tsx
-/src/App.test.tsx
+# Ignore Expo-specific directories
+.expo/
+.expo-shared/
 
-# storybook build
-/storybook-static
-/stories/*
-/.storybook
-/*.yml
-/*.yaml
+# Ignore Metro bundler cache
+.metro/
+
+# Ignore Yarn cache and configuration
+.yarn/
+
+# Ignore log files
+*.log
+
+# Ignore environment files
+.env
+*.env
+
+# Ignore lock files
+yarn.lock
+package-lock.json
+
+# Ignore files with specific extensions (if not needed)
+*.json
+*.md
+
+# Ignore Expo configuration files (if you prefer)
+app.json
+app.config.js
