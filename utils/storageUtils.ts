@@ -1,7 +1,7 @@
 // src/utils/storageUtils.ts
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const STATE_KEY_PREFIX = "appState_";
+const STATE_KEY_PREFIX = 'appState_';
 
 // Save state to AsyncStorage
 export const saveState = async (key: string, state: any): Promise<void> => {
@@ -16,9 +16,7 @@ export const saveState = async (key: string, state: any): Promise<void> => {
 // Load state from AsyncStorage
 export const loadState = async (key: string): Promise<any> => {
   try {
-    const serializedState = await AsyncStorage.getItem(
-      `${STATE_KEY_PREFIX}${key}`
-    );
+    const serializedState = await AsyncStorage.getItem(`${STATE_KEY_PREFIX}${key}`);
     if (serializedState === null) {
       return undefined;
     }

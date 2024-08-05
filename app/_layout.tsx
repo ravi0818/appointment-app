@@ -1,25 +1,29 @@
-import React, { useEffect } from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme,
-  ThemeProvider as NavigationThemeProvider,
-} from "@react-navigation/native";
-import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
-import { Provider as ReduxProvider } from "react-redux";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { store } from "@/redux/store";
-import { loadState } from "@/utils/storageUtils";
-import { loginSuccess } from "@/redux/slices/auth";
+import React, { useEffect } from 'react';
+import { useColorScheme } from 'react-native';
 import {
   Provider as PaperProvider,
   MD3LightTheme as PaperDefaultTheme,
   MD3DarkTheme as PaperDarkTheme,
-} from "react-native-paper";
-import { useColorScheme } from "react-native";
-import { Stack, useRouter } from "expo-router";
-import { SafeAreaProvider } from "react-native-safe-area-context"; // Ensure correct import
+} from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider as ReduxProvider } from 'react-redux';
+
+import { useFonts } from 'expo-font';
+import { Stack, useRouter } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { loginSuccess } from '@/redux/slices/auth';
+import { store } from '@/redux/store';
+import { loadState } from '@/utils/storageUtils';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import {
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+  ThemeProvider as NavigationThemeProvider,
+} from '@react-navigation/native';
+
+// Ensure correct import
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,8 +33,8 @@ const CombinedDefaultTheme = {
   colors: {
     ...NavigationDefaultTheme.colors,
     ...PaperDefaultTheme.colors,
-    primary: "tomato",
-    secondary: "yellow",
+    primary: 'tomato',
+    secondary: 'yellow',
   },
 };
 
@@ -40,14 +44,14 @@ const CombinedDarkTheme = {
   colors: {
     ...NavigationDarkTheme.colors,
     ...PaperDarkTheme.colors,
-    primary: "tomato",
-    secondary: "yellow",
+    primary: 'tomato',
+    secondary: 'yellow',
   },
 };
 
 export default function RootLayout() {
   const [fontsLoaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
 
@@ -69,16 +73,8 @@ export default function RootLayout() {
 
   return (
     <ReduxProvider store={store}>
-      <PaperProvider
-        theme={
-          colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme
-        }
-      >
-        <NavigationThemeProvider
-          value={
-            colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme
-          }
-        >
+      <PaperProvider theme={colorScheme === 'dark' ? CombinedDarkTheme : CombinedDefaultTheme}>
+        <NavigationThemeProvider value={colorScheme === 'dark' ? CombinedDarkTheme : CombinedDefaultTheme}>
           <SafeAreaProvider>
             <RootLayoutNav />
           </SafeAreaProvider>
@@ -92,7 +88,7 @@ function RootLayoutNav() {
   const dispatch = useAppDispatch();
 
   const retrieveLogin = async () => {
-    const authData = await loadState("auth");
+    const authData = await loadState('auth');
     if (authData) {
       dispatch(loginSuccess(authData));
     }
@@ -107,9 +103,9 @@ function RootLayoutNav() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      router.push("/home");
+      router.push('/home');
     } else {
-      router.push("/login");
+      router.push('/login');
     }
   }, [isLoggedIn, router]);
 

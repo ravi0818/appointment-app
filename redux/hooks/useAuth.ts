@@ -1,5 +1,8 @@
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store"; // Adjust the import as necessary
+import { useSelector } from 'react-redux';
+
+import { RootState } from '@/redux/store';
+
+// Adjust the import as necessary
 
 export function useAuth() {
   const { token } = useSelector((state: RootState) => state.auth);

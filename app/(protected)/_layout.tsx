@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { Tabs } from "expo-router";
-import { Icon } from "react-native-paper";
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Icon } from 'react-native-paper';
+
+import { Tabs } from 'expo-router';
 
 const ProtectedLayout = () => {
   return (
@@ -9,21 +10,17 @@ const ProtectedLayout = () => {
       <Tabs.Screen
         name="home"
         options={{
-          title: "Home",
+          title: 'Home',
           headerShown: false,
-          tabBarIcon: ({ focused, color, size }) => (
-            <Icon source="home" size={size} color={color} />
-          ),
+          tabBarIcon: ({ focused, color, size }) => <Icon source="home" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: 'Profile',
           headerShown: false,
-          tabBarIcon: ({ focused, color, size }) => (
-            <Icon source="account" size={size} color={color} />
-          ),
+          tabBarIcon: ({ focused, color, size }) => <Icon source="account" size={size} color={color} />,
         }}
       />
     </Tabs>
