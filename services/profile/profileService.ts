@@ -20,7 +20,28 @@ const authService = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['PatientProfile'],
     }),
+
+    getClinicProfile: builder.query<IPatientResponse, void>({
+      query: () => ({
+        url: API_ENDPOINTS.clinic.profile,
+        method: 'GET',
+      }),
+      providesTags: ['ClinicProfile'],
+    }),
+    updateClinicProfile: builder.mutation<{ message: string }, IPatientUpdateRequest>({
+      query: (payload) => ({
+        url: API_ENDPOINTS.clinic.profile,
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: ['ClinicProfile'],
+    }),
   }),
 });
 
-export const { useGetPatientProfileQuery, useUpdatePatientProfileMutation } = authService;
+export const {
+  useGetPatientProfileQuery,
+  useUpdatePatientProfileMutation,
+  useGetClinicProfileQuery,
+  useUpdateClinicProfileMutation,
+} = authService;

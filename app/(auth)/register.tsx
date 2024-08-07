@@ -9,7 +9,7 @@ import { useRegisterMutation } from '@/services/auth/authService';
 
 const RegisterScreen = () => {
   const router = useRouter();
-  const [register] = useRegisterMutation(); // Replace with your actual register mutation
+  const [register] = useRegisterMutation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('Patient');
@@ -24,7 +24,6 @@ const RegisterScreen = () => {
     }
 
     try {
-      // Call register mutation
       await register({ email, password, role }).unwrap();
       Alert.alert('Success', 'Registration successful', [{ text: 'OK', onPress: () => router.push('/login') }]);
     } catch (error) {
