@@ -6,4 +6,7 @@ export const API_ENDPOINTS = {
   patient: {
     profile: 'patient/profile',
   },
+  clinic: {
+    profile: 'clinic/profile',
+  },
 };
