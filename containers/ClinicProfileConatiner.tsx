@@ -67,12 +67,14 @@ const ClinicProfileContainer = () => {
       label: 'Clinic Name',
       value: clinicProfileData?.name || '',
       onChange: handleChange,
+      editable: true,
     },
     {
       key: 'email',
       label: 'Email',
       value: clinicProfileData?.contacts?.email || '',
       onChange: () => {},
+      editable: false,
     },
     {
       key: 'primaryPhone',
@@ -80,6 +82,8 @@ const ClinicProfileContainer = () => {
       value: clinicProfileData?.contacts?.primaryPhone || '',
       onChange: handleContactChange,
       keyboardType: 'numeric',
+      editable: true,
+      maxLength: 10,
     },
     {
       key: 'alternativePhone',
@@ -87,12 +91,15 @@ const ClinicProfileContainer = () => {
       value: clinicProfileData?.contacts?.alternativePhone || '',
       onChange: handleContactChange,
       keyboardType: 'numeric',
+      editable: true,
+      maxLength: 10,
     },
     {
       key: 'address',
       label: 'Address',
       value: clinicProfileData?.address || '',
       onChange: handleChange,
+      editable: true,
     },
   ];
 

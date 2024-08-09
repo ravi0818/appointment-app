@@ -71,12 +71,14 @@ const PatientProfileContainer = () => {
       label: 'Name',
       value: patientProfileData?.name || '',
       onChange: handleChange,
+      editable: true,
     },
     {
       key: 'email',
       label: 'Email',
       value: patientProfileData?.contacts?.email || '',
       onChange: () => {},
+      editable: false,
     },
     {
       key: 'primaryPhone',
@@ -84,6 +86,8 @@ const PatientProfileContainer = () => {
       value: patientProfileData?.contacts?.primaryPhone || '',
       onChange: handleContactChange,
       keyboardType: 'numeric',
+      maxLength: 10,
+      editable: true,
     },
     {
       key: 'alternativePhone',
@@ -91,25 +95,31 @@ const PatientProfileContainer = () => {
       value: patientProfileData?.contacts?.alternativePhone || '',
       onChange: handleContactChange,
       keyboardType: 'numeric',
+      maxLength: 10,
+      editable: true,
     },
     {
       key: 'age',
       label: 'Age',
-      value: patientProfileData?.age?.toString() || '',
+      value: patientProfileData?.age?.toString() ?? '',
       onChange: handleChange,
       keyboardType: 'numeric',
+      editable: true,
+      maxLength: 2,
     },
     {
       key: 'gender',
       label: 'Gender',
       value: patientProfileData?.gender || '',
       onChange: handleChange,
+      editable: true,
     },
     {
       key: 'address',
       label: 'Address',
       value: patientProfileData?.address || '',
       onChange: handleChange,
+      editable: true,
     },
   ];
 

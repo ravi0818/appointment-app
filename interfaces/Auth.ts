@@ -7,6 +7,7 @@ export interface IRegisterRequest {
   email: string;
   password: string;
   role: string;
+  pushToken?: string;
 }
 
 export interface ILoginResponse {
@@ -20,6 +21,7 @@ export interface IRegisterResponse {
 export interface IUser {
   email: string;
   role: string;
+  pushToken: string;
 }
 export interface IAuthState {
   token: string | null;

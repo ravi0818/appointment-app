@@ -9,7 +9,7 @@ import { jwtDecode } from 'jwt-decode';
 
 import { IUser } from '@/interfaces';
 import { useAuth } from '@/redux/hooks/useAuth';
-import { loginSuccess } from '@/redux/slices/auth';
+import { saveAuthData } from '@/redux/slices/auth';
 import { useLoginMutation } from '@/services/auth/authService';
 
 const LoginScreen = () => {
@@ -40,11 +40,12 @@ const LoginScreen = () => {
       const decodedToken = jwtDecode(response.token) as IUser;
       console.log({ decodedToken });
       dispatch(
-        loginSuccess({
+        saveAuthData({
           token: response.token,
           user: {
             email: decodedToken?.email,
             role: decodedToken?.role,
+            pushToken: decodedToken?.pushToken,
           },
         })
       );
