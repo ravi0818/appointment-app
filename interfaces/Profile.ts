@@ -50,4 +50,6 @@ export interface IProfileField {
   value: string;
   onChange: (field: string, value: string) => void;
   keyboardType?: 'default' | 'number-pad' | 'decimal-pad' | 'numeric' | 'email-address' | 'phone-pad' | 'url';
+  editable: boolean;
+  maxLength?: number;
 }

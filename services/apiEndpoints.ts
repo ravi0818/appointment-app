@@ -9,4 +9,7 @@ export const API_ENDPOINTS = {
   clinic: {
     profile: 'clinic/profile',
   },
+  user: {
+    savePushToken: 'user/save-push-token',
+  },
 };

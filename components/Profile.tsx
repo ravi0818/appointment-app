@@ -26,9 +26,10 @@ const Profile = ({ profilePicture, fields, handleSave, isSaveEnabled }: IProfile
     setIsEditing({});
   };
 
-  const renderField = ({ key, label, value, onChange, keyboardType }: IProfileField) => {
+  const renderField = ({ key, label, value, onChange, keyboardType, editable, maxLength }: IProfileField) => {
     return isEditing[key] ? (
       <TextInput
+        key={key}
         label={label}
         value={value}
         onChangeText={(text) => onChange(key, text)}
@@ -36,6 +37,7 @@ const Profile = ({ profilePicture, fields, handleSave, isSaveEnabled }: IProfile
         onBlur={() => toggleEdit(key)}
         autoFocus
         keyboardType={keyboardType}
+        maxLength={maxLength}
       />
     ) : (
       <View style={styles.fieldContainer} key={key}>
@@ -43,7 +45,7 @@ const Profile = ({ profilePicture, fields, handleSave, isSaveEnabled }: IProfile
           <Text style={styles.fieldLabel}>{label}</Text>
           <Text style={styles.fieldValue}>{value}</Text>
         </View>
-        {key !== 'email' ? (
+        {editable ? (
           <IconButton icon="pencil" size={20} onPress={() => toggleEdit(key)} style={styles.editIcon} />
         ) : (
           <View style={{ height: 48 }}></View>
