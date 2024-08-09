@@ -6,10 +6,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 
 import { useRegisterMutation } from '@/services/auth/authService';
+import { usePushNotifications } from '@/utils/usePushNotifications';
 
 const RegisterScreen = () => {
   const router = useRouter();
   const [register] = useRegisterMutation();
+  const { expoPushToken } = usePushNotifications();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('Patient');
@@ -24,7 +26,7 @@ const RegisterScreen = () => {
     }
 
     try {
-      await register({ email, password, role }).unwrap();
+      await register({ email, password, role, pushToken: expoPushToken ?? '' }).unwrap();
       Alert.alert('Success', 'Registration successful', [{ text: 'OK', onPress: () => router.push('/login') }]);
     } catch (error) {
       setErrorMessage('Registration failed. Please try again.');

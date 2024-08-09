@@ -13,9 +13,11 @@ import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { loginSuccess } from '@/redux/slices/auth';
+import { saveAuthData } from '@/redux/slices/auth';
 import { store } from '@/redux/store';
+import { useSavePushTokenMutation } from '@/services/user/userService';
 import { loadState } from '@/utils/storageUtils';
+import { usePushNotifications } from '@/utils/usePushNotifications';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {
   DarkTheme as NavigationDarkTheme,
@@ -86,11 +88,15 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelector((state) => state.auth.token);
+  const router = useRouter();
+  const { expoPushToken } = usePushNotifications();
+  const [savePushToken] = useSavePushTokenMutation();
 
   const retrieveLogin = async () => {
     const authData = await loadState('auth');
     if (authData) {
-      dispatch(loginSuccess(authData));
+      dispatch(saveAuthData(authData));
     }
   };
 
@@ -98,8 +104,29 @@ function RootLayoutNav() {
     retrieveLogin();
   }, []);
 
-  const isLoggedIn = useAppSelector((state) => state.auth.token);
-  const router = useRouter();
+  const savePushTokenHandler = async () => {
+    try {
+      const authData = await loadState('auth');
+      console.log('===============', authData?.user?.pushToken, expoPushToken);
+      if (authData?.user?.pushToken === expoPushToken) return;
+      const response = await savePushToken({ pushToken: expoPushToken });
+      console.log('response === ', response);
+      if (response.data?.status === 200) {
+        authData.user.pushToken = expoPushToken;
+        console.log('authData', authData);
+        dispatch(saveAuthData(authData));
+      }
+    } catch (error) {
+      console.error('Error saving push token:', error);
+    }
+  };
+
+  useEffect(() => {
+    console.log('expoPushToken', expoPushToken);
+    if (expoPushToken) {
+      savePushTokenHandler();
+    }
+  }, [expoPushToken]);
 
   useEffect(() => {
     if (isLoggedIn) {
