@@ -13,9 +13,10 @@ import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { saveAuthData } from '@/redux/slices/auth';
+import { saveAuthData } from '@/redux/slices/authSlice';
 import { store } from '@/redux/store';
-import { useSavePushTokenMutation } from '@/services/user/userService';
+import { useSavePushTokenMutation } from '@/services/userService';
+import { isEqual } from '@/utils';
 import { loadState } from '@/utils/storageUtils';
 import { usePushNotifications } from '@/utils/usePushNotifications';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -107,13 +108,10 @@ function RootLayoutNav() {
   const savePushTokenHandler = async () => {
     try {
       const authData = await loadState('auth');
-      console.log('===============', authData?.user?.pushToken, expoPushToken);
       if (authData?.user?.pushToken === expoPushToken) return;
-      const response = await savePushToken({ pushToken: expoPushToken });
-      console.log('response === ', response);
-      if (response.data?.status === 200) {
+      const response = await savePushToken({ pushToken: expoPushToken }).unwrap();
+      if (isEqual(response.data?.status, 'success')) {
         authData.user.pushToken = expoPushToken;
-        console.log('authData', authData);
         dispatch(saveAuthData(authData));
       }
     } catch (error) {
@@ -122,7 +120,6 @@ function RootLayoutNav() {
   };
 
   useEffect(() => {
-    console.log('expoPushToken', expoPushToken);
     if (expoPushToken) {
       savePushTokenHandler();
     }
@@ -140,7 +137,8 @@ function RootLayoutNav() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(protected)" options={{ headerShown: false }} />
+      <Stack.Screen name="(protected)/(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(protected)/doctor" options={{ headerShown: false }} />
     </Stack>
   );
 }

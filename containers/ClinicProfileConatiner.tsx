@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import Loader from '@/components/Loader';
 import Profile from '@/components/Profile';
 import { IClinicResponse, IClinicUpdateRequest, IProfileField } from '@/interfaces/Profile';
-import { useGetClinicProfileQuery, useUpdateClinicProfileMutation } from '@/services/profile/profileService';
+import { useGetClinicProfileQuery, useUpdateClinicProfileMutation } from '@/services/profileService';
 
 const ClinicProfileContainer = () => {
   const { data: clinicProfileResponseData, isFetching: isClinicProfileFetching } = useGetClinicProfileQuery();
@@ -20,8 +20,6 @@ const ClinicProfileContainer = () => {
     address: '',
     profilePicture: '',
   });
-
-  const [isSaveEnabled, setIsSaveEnabled] = useState(false);
 
   const handleChange = (field: string, value: string) => {
     setClinicProfileData((prevData) => ({
@@ -41,7 +39,7 @@ const ClinicProfileContainer = () => {
   };
 
   useEffect(() => {
-    if (clinicProfileResponseData) setClinicProfileData(clinicProfileResponseData);
+    if (clinicProfileResponseData) setClinicProfileData(clinicProfileResponseData.data);
   }, [clinicProfileResponseData]);
 
   const handleSave = () => {
@@ -57,7 +55,7 @@ const ClinicProfileContainer = () => {
       };
       updateClinicProfile(payload);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -103,9 +101,8 @@ const ClinicProfileContainer = () => {
     },
   ];
 
-  useEffect(() => {
-    const isDataChanged = JSON.stringify(clinicProfileData) !== JSON.stringify(clinicProfileResponseData);
-    setIsSaveEnabled(isDataChanged);
+  const isSaveEnabled = useMemo(() => {
+    return JSON.stringify(clinicProfileData) !== JSON.stringify(clinicProfileResponseData?.data);
   }, [clinicProfileData]);
 
   if (isClinicProfileFetching || !clinicProfileData?.contacts?.email || isUserProfileUpdating) return <Loader />;

@@ -1,9 +1,10 @@
 import { useAppDispatch } from '@/redux/hooks';
-import { logout } from '@/redux/slices/auth';
+import { logout } from '@/redux/slices/authSlice';
 import { RootState } from '@/redux/store';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const BASE_URL = 'http://192.168.0.153:5000/api/';
+// const BASE_URL = 'http://localhost:5000/api/';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
@@ -31,6 +32,6 @@ const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReAuth,
-  tagTypes: ['PatientProfile', 'ClinicProfile'],
+  tagTypes: ['PatientProfile', 'ClinicProfile', 'Doctor', 'User', 'Availability'],
   endpoints: (builder) => ({}),
 });

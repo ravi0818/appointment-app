@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useRouter } from 'expo-router';
 
-import { useRegisterMutation } from '@/services/auth/authService';
+import { useRegisterMutation } from '@/services/authService';
 import { usePushNotifications } from '@/utils/usePushNotifications';
 
 const RegisterScreen = () => {

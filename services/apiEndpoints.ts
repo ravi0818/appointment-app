@@ -12,4 +12,20 @@ export const API_ENDPOINTS = {
   user: {
     savePushToken: 'user/save-push-token',
   },
+  doctor: {
+    addDoctor: 'doctor',
+    getDoctors: 'doctor',
+    getAllDoctors: 'doctor/all',
+    getDoctorById: (id: string) => `doctor/${id}`,
+    updateDoctor: (id: string) => `doctor/${id}`,
+    deleteDoctor: (id: string) => `doctor/${id}`,
+  },
+  availability: {
+    create: 'availability',
+    getDoctorAvailability: (id: string) => `availability/doctor/${id}`,
+    update: (id: string) => `availability/${id}`,
+    delete: (id: string) => `availability/${id}`,
+    getRemainingSlots: (availabilityId: string, date: string) =>
+      `availability/slots?availabilityId=${availabilityId}&date=${date}`,
+  },
 };

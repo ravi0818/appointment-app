@@ -22,7 +22,7 @@ async function sendPushNotification(expoPushToken: string) {
     data: { someData: 'goes here' },
   };
 
-  const res = await fetch('https://exp.host/--/api/v2/push/send', {
+  await fetch('https://exp.host/--/api/v2/push/send', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -31,8 +31,6 @@ async function sendPushNotification(expoPushToken: string) {
     },
     body: JSON.stringify(message),
   });
-
-  console.log('res', res);
 }
 
 function handleRegistrationError(errorMessage: string) {
@@ -108,13 +106,10 @@ export function usePushNotifications() {
       });
 
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
-      console.log(notification);
       setNotification(notification);
     });
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-      console.log(response);
-    });
+    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {});
 
     return () => {
       if (notificationListener.current) {

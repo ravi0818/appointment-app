@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Avatar, Button, Card, TextInput, IconButton, Text } from 'react-native-paper';
 
-import ProfilePlaceholder from '@/assets/images/profile-placeholder.png';
 import { IProfileField } from '@/interfaces/Profile';
+import { useAppDispatch } from '@/redux/hooks';
+import { logout } from '@/redux/slices/authSlice';
 
 interface IProfileProps {
   profilePicture: string;
@@ -14,6 +15,7 @@ interface IProfileProps {
 
 const Profile = ({ profilePicture, fields, handleSave, isSaveEnabled }: IProfileProps) => {
   const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({});
+  const dispatch = useAppDispatch();
 
   const toggleEdit = (field: string) => {
     setIsEditing((prev) => ({
@@ -60,7 +62,11 @@ const Profile = ({ profilePicture, fields, handleSave, isSaveEnabled }: IProfile
         <Card.Content style={styles.cardContent}>
           <Avatar.Image
             size={100}
-            source={profilePicture ? { uri: profilePicture } : ProfilePlaceholder}
+            source={{
+              uri: profilePicture
+                ? profilePicture
+                : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
+            }}
             style={styles.avatar}
           />
           {fields.map((field) => renderField(field))}
@@ -75,6 +81,9 @@ const Profile = ({ profilePicture, fields, handleSave, isSaveEnabled }: IProfile
             disabled={!isSaveEnabled}
           >
             Save Changes
+          </Button>
+          <Button mode="contained" onPress={() => dispatch(logout())}>
+            Logout
           </Button>
         </Card.Actions>
       </Card>
