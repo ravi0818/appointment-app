@@ -2333,6 +2333,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-picker/picker@npm:^2.7.7":
+  version: 2.7.7
+  resolution: "@react-native-picker/picker@npm:2.7.7"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: bd8501866647e1071370f33c7e580c284b6f940e1e2f8841f502c313b7e17fee857806859ab176f3d7a6a0eff5aec9e7445a314e5c98dddeafd30e09374515a7
+  languageName: node
+  linkType: hard
+
 "@react-native/assets-registry@npm:0.74.85":
   version: 0.74.85
   resolution: "@react-native/assets-registry@npm:0.74.85"
@@ -3533,6 +3543,7 @@ __metadata:
     "@babel/core": "npm:^7.20.0"
     "@expo/vector-icons": "npm:^14.0.2"
     "@react-native-async-storage/async-storage": "npm:^1.24.0"
+    "@react-native-picker/picker": "npm:^2.7.7"
     "@react-navigation/native": "npm:^6.0.2"
     "@reduxjs/toolkit": "npm:^2.2.7"
     "@trivago/prettier-plugin-sort-imports": "npm:^2.0.0"
@@ -3555,6 +3566,7 @@ __metadata:
     prettier: "npm:3.3.3"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
+    react-hook-form: "npm:^7.52.2"
     react-native: "npm:0.74.3"
     react-native-paper: "npm:^5.12.5"
     react-native-reanimated: "npm:~3.10.1"
@@ -9523,6 +9535,15 @@ __metadata:
   peerDependencies:
     react: ">=17.0.0"
   checksum: 8f51257c261bfefff86f618e958683536248f708019632d309ee5ebdd52f25d3c130660d06fb6f0f4fdef79f00f8ec7177233a872c2321f7d46b7e77ccc522a1
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.52.2":
+  version: 7.52.2
+  resolution: "react-hook-form@npm:7.52.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 2b8d37239d40f4326a24609c1bf5b4ba2cf66bc4a988213ccd7eb92a254dd5bf9c4b94caa353bce4b1d6d8a9ecd2ea3103e25c6d2d72d53f7be26f09053a8b2f
   languageName: node
   linkType: hard
 

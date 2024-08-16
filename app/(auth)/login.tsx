@@ -9,8 +9,8 @@ import { jwtDecode } from 'jwt-decode';
 
 import { IUser } from '@/interfaces';
 import { useAuth } from '@/redux/hooks/useAuth';
-import { saveAuthData } from '@/redux/slices/auth';
-import { useLoginMutation } from '@/services/auth/authService';
+import { saveAuthData } from '@/redux/slices/authSlice';
+import { useLoginMutation } from '@/services/authService';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -37,11 +37,10 @@ const LoginScreen = () => {
 
     try {
       const response = await login({ email, password }).unwrap();
-      const decodedToken = jwtDecode(response.token) as IUser;
-      console.log({ decodedToken });
+      const decodedToken = jwtDecode(response.data.token) as IUser;
       dispatch(
         saveAuthData({
-          token: response.token,
+          token: response.data.token,
           user: {
             email: decodedToken?.email,
             role: decodedToken?.role,

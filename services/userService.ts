@@ -1,7 +1,7 @@
 import { IResponse } from '@/interfaces';
 
-import { API_ENDPOINTS } from '../apiEndpoints';
-import { apiSlice } from '../apiSlice';
+import { API_ENDPOINTS } from './apiEndpoints';
+import { apiSlice } from './apiSlice';
 
 const userService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

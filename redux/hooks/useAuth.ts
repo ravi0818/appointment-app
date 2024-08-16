@@ -1,9 +1,8 @@
-import { useSelector } from 'react-redux';
-
 import { RootState } from '@/redux/store';
 
+import { useAppSelector } from '.';
+
 export function useAuth() {
-  const { token } = useSelector((state: RootState) => state.auth);
-  console.log({ token });
-  return !!token; // Returns true if token exists, false otherwise
+  const { token } = useAppSelector((state: RootState) => state.auth);
+  return !!token;
 }
