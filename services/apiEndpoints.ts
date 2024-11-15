@@ -28,4 +28,11 @@ export const API_ENDPOINTS = {
     getRemainingSlots: (availabilityId: string, date: string) =>
       `availability/slots?availabilityId=${availabilityId}&date=${date}`,
   },
+  appointment: {
+    bookAppointment: 'appointment',
+    getUserAppointments: 'appointment/user',
+    cancelAppointment: (id: string) => `appointment/${id}/cancel`,
+    getDoctorAppointmentsByDate: (doctorId: string, date: string) => `appointment/doctor/${doctorId}?date=${date}`,
+    deleteAppointment: (id: string) => `appointment/${id}`,
+  },
 };
