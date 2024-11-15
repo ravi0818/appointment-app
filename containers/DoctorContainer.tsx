@@ -16,6 +16,7 @@ import {
   useGetDoctorByIdQuery,
   useGetDoctorAvailabilityQuery,
   useGetRemainingSlotsQuery,
+  useBookAppointmentMutation,
 } from '@/services';
 import { getNextDateForDay, isEqual } from '@/utils';
 
@@ -36,6 +37,7 @@ const DoctorContainer = () => {
 
   const [createAvailability, { isLoading: isAvailabilityAdding }] = useCreateAvailabilityMutation();
   const [deleteAvailability, { isLoading: isAvailabilityDeleting }] = useDeleteAvailabilityMutation();
+  const [bookAppointment, { isLoading: isBookingAppointment }] = useBookAppointmentMutation();
 
   const {
     data: availableSlotsResponse,
@@ -82,6 +84,18 @@ const DoctorContainer = () => {
     [deleteAvailability, refetchAvailability]
   );
 
+  const bookAppointmentHandler = useCallback(async () => {
+    try {
+      const payload = {
+        availabilityId: selectedAvailability._id ?? '',
+        date: getNextDateForDay(selectedAvailability.day),
+      };
+      await bookAppointment(payload);
+    } catch (error) {
+      console.error('Error booking appointment:', error);
+    }
+  }, [bookAppointment]);
+
   const closeModal = useCallback(() => setOpenAvailabilityModal(false), []);
 
   if (
@@ -91,7 +105,8 @@ const DoctorContainer = () => {
     isSlotsLoading ||
     isSlotsFetching ||
     isAvailabilityAdding ||
-    isAvailabilityDeleting
+    isAvailabilityDeleting ||
+    isBookingAppointment
   ) {
     return <Loader />;
   }
@@ -129,7 +144,11 @@ const DoctorContainer = () => {
               Add Availability
             </Button>
           ) : (
-            <Button mode="contained" onPress={() => {}} disabled={!selectedAvailability._id || remainingSlots === 0}>
+            <Button
+              mode="contained"
+              onPress={bookAppointmentHandler}
+              disabled={!selectedAvailability._id || remainingSlots === 0}
+            >
               Book Slot
             </Button>
           )}
