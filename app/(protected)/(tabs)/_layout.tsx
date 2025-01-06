@@ -4,7 +4,12 @@ import { Icon } from 'react-native-paper';
 
 import { Tabs } from 'expo-router';
 
+import { useRole } from '@/redux/hooks/useRole';
+import { isEqual } from '@/utils';
+
 const ProtectedLayout = () => {
+  const role = useRole();
+
   return (
     <Tabs>
       <Tabs.Screen
@@ -13,6 +18,15 @@ const ProtectedLayout = () => {
           title: 'Home',
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => <Icon source="home" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="appointments"
+        options={{
+          title: 'Appointments',
+          headerShown: false,
+          tabBarIcon: ({ focused, color, size }) => <Icon source="calendar" size={size} color={color} />,
+          tabBarButton: isEqual(role, 'patient') ? undefined : () => null,
         }}
       />
       <Tabs.Screen

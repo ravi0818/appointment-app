@@ -121,7 +121,6 @@ const styles = StyleSheet.create({
   },
   fieldLabel: {
     fontWeight: 'bold',
-    color: 'white',
   },
   fieldValue: {
     flex: 1,

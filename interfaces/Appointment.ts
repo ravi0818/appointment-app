@@ -20,3 +20,22 @@ export interface IAppointment {
   date: string;
   status: string;
 }
+
+interface Doctor {
+  name: string;
+  specialization: string;
+}
+
+interface Availability {
+  day: string;
+  startTime: string;
+  endTime: string;
+}
+export interface IAppointmentDetails {
+  _id: string;
+  doctorId: Doctor;
+  userId: string;
+  availabilityId: Availability;
+  date: string;
+  status: string;
+}
