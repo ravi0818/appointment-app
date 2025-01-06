@@ -1,5 +1,5 @@
-import React, { useMemo, useState, useCallback } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import { ScrollView, StyleSheet, ToastAndroid, View } from 'react-native';
 import { Button, Card, Chip, Text } from 'react-native-paper';
 
 import { useLocalSearchParams } from 'expo-router';
@@ -8,7 +8,7 @@ import Loader from '@/components/Loader';
 import AddAvailabilityModal from '@/components/addAvailability/AddAvailabilityModal';
 import Availability from '@/components/doctor/Availability';
 import DoctorDetailsCard from '@/components/doctor/DoctorDetailsCard';
-import { IAvailability, IAvailabilityFormData, IDoctorResponse } from '@/interfaces';
+import { IAvailability, IAvailabilityFormData, IDoctorResponse, IErrorResponse } from '@/interfaces';
 import { useRole } from '@/redux/hooks/useRole';
 import {
   useCreateAvailabilityMutation,
@@ -43,6 +43,7 @@ const DoctorContainer = () => {
     data: availableSlotsResponse,
     isLoading: isSlotsLoading,
     isFetching: isSlotsFetching,
+    refetch: refetchSlots,
   } = useGetRemainingSlotsQuery(
     {
       availabilityId: selectedAvailability._id ?? '',
@@ -59,44 +60,46 @@ const DoctorContainer = () => {
     [availableSlotsResponse]
   );
 
-  const addAvailabilityHandler = useCallback(
-    async (data: IAvailabilityFormData) => {
-      try {
-        await createAvailability({ doctorId: doctorId as string, ...data });
-        refetchAvailability();
-        setOpenAvailabilityModal(false);
-      } catch (error) {
-        console.error('Error creating availability:', error);
-      }
-    },
-    [createAvailability, doctorId, refetchAvailability]
-  );
+  const addAvailabilityHandler = async (data: IAvailabilityFormData) => {
+    try {
+      await createAvailability({ doctorId: doctorId as string, ...data });
+      refetchAvailability();
+      setOpenAvailabilityModal(false);
+    } catch (error) {
+      console.error('Error creating availability:', error);
+    }
+  };
 
-  const deleteAvailabilityHandler = useCallback(
-    async (availabilityId: string) => {
-      try {
-        await deleteAvailability({ availabilityId });
-        refetchAvailability();
-      } catch (error) {
-        console.error('Error deleting availability:', error);
-      }
-    },
-    [deleteAvailability, refetchAvailability]
-  );
+  const deleteAvailabilityHandler = async (availabilityId: string) => {
+    try {
+      await deleteAvailability({ availabilityId });
+      refetchAvailability();
+    } catch (error) {
+      console.error('Error deleting availability:', error);
+    }
+  };
 
-  const bookAppointmentHandler = useCallback(async () => {
+  const bookAppointmentHandler = async () => {
     try {
       const payload = {
         availabilityId: selectedAvailability._id ?? '',
         date: getNextDateForDay(selectedAvailability.day),
       };
-      await bookAppointment(payload);
+      const response = await bookAppointment(payload).unwrap();
+      refetchSlots();
+      ToastAndroid.show(response.message || '', ToastAndroid.SHORT);
     } catch (error) {
+      const err = error as IErrorResponse;
+      ToastAndroid.show(err.data.message || '', ToastAndroid.SHORT);
       console.error('Error booking appointment:', error);
     }
-  }, [bookAppointment]);
+  };
 
-  const closeModal = useCallback(() => setOpenAvailabilityModal(false), []);
+  useEffect(() => {
+    if (availableSlotsResponse) refetchSlots();
+  }, [selectedAvailability]);
+
+  const closeModal = () => setOpenAvailabilityModal(false);
 
   if (
     isDoctorLoading ||

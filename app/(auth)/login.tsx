@@ -25,7 +25,7 @@ const LoginScreen = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    if (isLoggedIn) router.push('/home');
+    if (isLoggedIn) router.replace('/home');
   }, [isLoggedIn]);
 
   const handleLogin = async () => {

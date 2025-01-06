@@ -12,6 +12,8 @@ const RegisterScreen = () => {
   const router = useRouter();
   const [register] = useRegisterMutation();
   const { expoPushToken } = usePushNotifications();
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('Patient');
@@ -19,14 +21,14 @@ const RegisterScreen = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleRegister = async () => {
-    if (!email || !password) {
-      setErrorMessage('Email and password are required.');
+    if (!email || !password || !name || !phone) {
+      setErrorMessage('All fields are required.');
       setShowError(true);
       return;
     }
 
     try {
-      await register({ email, password, role, pushToken: expoPushToken ?? '' }).unwrap();
+      await register({ email, password, name, phone, role, pushToken: expoPushToken ?? '' }).unwrap();
       Alert.alert('Success', 'Registration successful', [{ text: 'OK', onPress: () => router.push('/login') }]);
     } catch (error) {
       setErrorMessage('Registration failed. Please try again.');
@@ -38,6 +40,16 @@ const RegisterScreen = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <Headline style={styles.header}>Register</Headline>
+        <TextInput label="Name" value={name} onChangeText={setName} keyboardType="email-address" style={styles.input} />
+        <TextInput
+          label="Phone"
+          value={phone}
+          onChangeText={(text) => setPhone(text.replace(/[^0-9]/g, ''))}
+          keyboardType="number-pad"
+          style={styles.input}
+          maxLength={10}
+          inputMode="numeric"
+        />
         <TextInput
           label="Email"
           value={email}

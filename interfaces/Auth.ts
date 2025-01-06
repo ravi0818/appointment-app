@@ -4,6 +4,8 @@ export interface ILoginRequest {
 }
 
 export interface IRegisterRequest {
+  name: string;
+  phone: string;
   email: string;
   password: string;
   role: string;

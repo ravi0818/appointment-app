@@ -3,19 +3,21 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Loader from '@/components/Loader';
 import Profile from '@/components/Profile';
 import { IClinicResponse, IClinicUpdateRequest, IProfileField } from '@/interfaces/Profile';
+import { useAppSelector } from '@/redux/hooks';
 import { useGetClinicProfileQuery, useUpdateClinicProfileMutation } from '@/services/profileService';
 
 const ClinicProfileContainer = () => {
+  const user = useAppSelector((state) => state.auth.user);
+
   const { data: clinicProfileResponseData, isFetching: isClinicProfileFetching } = useGetClinicProfileQuery();
 
   const [updateClinicProfile, { isLoading: isUserProfileUpdating }] = useUpdateClinicProfileMutation();
 
   const [clinicProfileData, setClinicProfileData] = useState<IClinicResponse>({
     name: '',
-    contacts: {
-      primaryPhone: '',
-      alternativePhone: '',
-      email: '',
+    phone: {
+      primary: '',
+      secondary: '',
     },
     address: '',
     profilePicture: '',
@@ -31,8 +33,8 @@ const ClinicProfileContainer = () => {
   const handleContactChange = (field: string, value: string) => {
     setClinicProfileData((prevData) => ({
       ...prevData,
-      contacts: {
-        ...prevData.contacts,
+      phone: {
+        ...prevData.phone,
         [field]: value,
       },
     }));
@@ -47,9 +49,9 @@ const ClinicProfileContainer = () => {
       const payload: IClinicUpdateRequest = {
         name: clinicProfileData.name,
         address: clinicProfileData.address,
-        contacts: {
-          primaryPhone: clinicProfileData.contacts.primaryPhone,
-          alternativePhone: clinicProfileData.contacts.alternativePhone,
+        phone: {
+          primary: clinicProfileData.phone.primary,
+          secondary: clinicProfileData.phone.secondary,
         },
         profilePicture: clinicProfileData.profilePicture,
       };
@@ -70,23 +72,23 @@ const ClinicProfileContainer = () => {
     {
       key: 'email',
       label: 'Email',
-      value: clinicProfileData?.contacts?.email || '',
+      value: user?.email || '',
       onChange: () => {},
       editable: false,
     },
     {
-      key: 'primaryPhone',
+      key: 'primary',
       label: 'Primary Phone',
-      value: clinicProfileData?.contacts?.primaryPhone || '',
+      value: clinicProfileData?.phone?.primary || '',
       onChange: handleContactChange,
       keyboardType: 'numeric',
       editable: true,
       maxLength: 10,
     },
     {
-      key: 'alternativePhone',
+      key: 'secondary',
       label: 'Alternative Phone',
-      value: clinicProfileData?.contacts?.alternativePhone || '',
+      value: clinicProfileData?.phone?.secondary || '',
       onChange: handleContactChange,
       keyboardType: 'numeric',
       editable: true,
@@ -105,7 +107,7 @@ const ClinicProfileContainer = () => {
     return JSON.stringify(clinicProfileData) !== JSON.stringify(clinicProfileResponseData?.data);
   }, [clinicProfileData]);
 
-  if (isClinicProfileFetching || !clinicProfileData?.contacts?.email || isUserProfileUpdating) return <Loader />;
+  if (isClinicProfileFetching || isUserProfileUpdating) return <Loader />;
 
   return (
     <Profile

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
-import { Button } from 'react-native-paper';
+import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
+import { Button, Text } from 'react-native-paper';
 
 import Loader from '@/components/Loader';
 import AddDoctorModal from '@/components/addDoctor/AddDoctorModal';
@@ -13,6 +13,7 @@ import {
   useGetDoctorsByUserIdQuery,
   useSaveDoctorMutation,
 } from '@/services';
+import commonStyles from '@/styles';
 import { isEqual } from '@/utils';
 
 const HomeContainer = () => {
@@ -63,8 +64,10 @@ const HomeContainer = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={commonStyles.container}>
       <AddDoctorModal visible={visible} closeModal={closeModal} onSubmit={handleSaveDoctor} />
+
+      <Text style={commonStyles.title}>Doctors</Text>
 
       {isEqual(user?.role ?? '', 'clinic') && (
         <View>
@@ -76,7 +79,8 @@ const HomeContainer = () => {
             data={doctorsList?.data || []}
             keyExtractor={(item) => item._id}
             renderItem={renderDoctorItemClinic}
-            contentContainerStyle={styles.list}
+            contentContainerStyle={commonStyles.list}
+            refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
           />
         </View>
       )}
@@ -88,7 +92,8 @@ const HomeContainer = () => {
             data={allDoctorsList?.data || []}
             keyExtractor={(item) => item._id}
             renderItem={renderDoctorItemPatient}
-            contentContainerStyle={styles.list}
+            contentContainerStyle={commonStyles.list}
+            refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
           />
         </View>
       )}
@@ -99,18 +104,11 @@ const HomeContainer = () => {
 export default HomeContainer;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
   card: {
     marginBottom: 16,
   },
   loader: {
     marginTop: 20,
-  },
-  list: {
-    paddingBottom: 16,
   },
   description: {
     fontSize: 16,
