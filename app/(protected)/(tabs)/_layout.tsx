@@ -4,6 +4,7 @@ import { Icon } from 'react-native-paper';
 
 import { Tabs } from 'expo-router';
 
+import CustomAppBar from '@/components/shared/CustomAppBar';
 import { useRole } from '@/redux/hooks/useRole';
 import { isEqual } from '@/utils';
 
@@ -17,6 +18,7 @@ const ProtectedLayout = () => {
         options={{
           title: 'Home',
           headerShown: false,
+          // header: (props) => <CustomAppBar props={props} />,
           tabBarIcon: ({ focused, color, size }) => <Icon source="home" size={size} color={color} />,
         }}
       />

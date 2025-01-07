@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
+import Loader from '@/components/Loader';
 import AppointmentCard from '@/components/appointment/AppointmentCard';
+import ConfirmationBox from '@/components/shared/ConfirmationBox';
 import { IAppointmentDetails } from '@/interfaces';
 import { useCancelAppointmentMutation, useGetUserAppointmentsQuery } from '@/services';
 import commonStyles from '@/styles';
@@ -10,18 +12,33 @@ import commonStyles from '@/styles';
 const AppointmentsContainer = () => {
   const { data: appointmentList, isLoading, refetch } = useGetUserAppointmentsQuery();
   const [cancelAppointment, { isLoading: isCancelling }] = useCancelAppointmentMutation();
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState<string>('');
 
-  const handleCancelAppointment = async (appointmentId: string) => {
-    await cancelAppointment({ appointmentId });
+  const closeConfirmation = () => {
+    setIsConfirmationOpen(false);
+  };
+
+  const onCancelConfirmation = (appointmentId: string) => {
+    setIsConfirmationOpen(true);
+    setSelectedAppointmentId(appointmentId);
+  };
+
+  const handleCancelAppointment = async () => {
+    setIsConfirmationOpen(false);
+    await cancelAppointment({ appointmentId: selectedAppointmentId });
+    refetch();
   };
 
   const renderAppointmentItem = ({ item }: { item: IAppointmentDetails }) => {
-    return <AppointmentCard appointment={item} actionHandler={handleCancelAppointment} />;
+    return <AppointmentCard appointment={item} actionHandler={onCancelConfirmation} />;
   };
+
+  if (isCancelling) return <Loader />;
 
   return (
     <View style={commonStyles.container}>
-      <Text style={commonStyles.title}>Appointments</Text>
+      <Text style={commonStyles.heading}>Appointments</Text>
 
       <FlatList
         //@ts-ignore
@@ -31,6 +48,15 @@ const AppointmentsContainer = () => {
         contentContainerStyle={commonStyles.list}
         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
       />
+
+      <ConfirmationBox
+        isOpen={isConfirmationOpen}
+        onClose={closeConfirmation}
+        onConfirm={handleCancelAppointment}
+        title={'Cancel Appointment'}
+      >
+        <Text>Are you sure you want to cancel this appointment?</Text>
+      </ConfirmationBox>
     </View>
   );
 };

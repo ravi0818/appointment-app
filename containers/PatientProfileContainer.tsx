@@ -81,7 +81,7 @@ const PatientProfileContainer = () => {
       editable: false,
     },
     {
-      key: 'primaryPhone',
+      key: 'primary',
       label: 'Primary Phone',
       value: patientProfileData?.phone?.primary || '',
       onChange: handleContactChange,
@@ -90,7 +90,7 @@ const PatientProfileContainer = () => {
       editable: true,
     },
     {
-      key: 'alternativePhone',
+      key: 'secondary',
       label: 'Alternative Phone',
       value: patientProfileData?.phone?.secondary || '',
       onChange: handleContactChange,
