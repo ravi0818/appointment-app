@@ -12,6 +12,7 @@ import { useFonts } from 'expo-font';
 import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
+import CustomAppBar from '@/components/shared/CustomAppBar';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { saveAuthData } from '@/redux/slices/authSlice';
 import { store } from '@/redux/store';
@@ -26,8 +27,6 @@ import {
   ThemeProvider as NavigationThemeProvider,
 } from '@react-navigation/native';
 
-// Ensure correct import
-
 SplashScreen.preventAutoHideAsync();
 
 const CombinedDefaultTheme = {
@@ -39,6 +38,7 @@ const CombinedDefaultTheme = {
     primary: 'tomato',
     secondary: 'yellow',
   },
+  fonts: PaperDefaultTheme.fonts,
 };
 
 const CombinedDarkTheme = {
@@ -50,6 +50,7 @@ const CombinedDarkTheme = {
     primary: 'tomato',
     secondary: 'yellow',
   },
+  fonts: PaperDarkTheme.fonts,
 };
 
 export default function RootLayout() {
@@ -138,7 +139,7 @@ function RootLayoutNav() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(protected)/(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="(protected)/doctor" options={{ headerShown: false }} />
+      <Stack.Screen name="(protected)/doctor" options={{ header: (props) => <CustomAppBar props={props} /> }} />
     </Stack>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { Button, Searchbar, Text, TextInput } from 'react-native-paper';
 
 import Loader from '@/components/Loader';
 import AddDoctorModal from '@/components/addDoctor/AddDoctorModal';
@@ -67,7 +67,10 @@ const HomeContainer = () => {
     <View style={commonStyles.container}>
       <AddDoctorModal visible={visible} closeModal={closeModal} onSubmit={handleSaveDoctor} />
 
-      <Text style={commonStyles.title}>Doctors</Text>
+      <View style={{ paddingBottom: 16 }}>
+        <Text style={commonStyles.heading}>Find Your Specialist Doctor</Text>
+        <Searchbar placeholder="Search" onChangeText={() => null} value={''} />
+      </View>
 
       {isEqual(user?.role ?? '', 'clinic') && (
         <View>
@@ -87,6 +90,8 @@ const HomeContainer = () => {
 
       {isEqual(user?.role ?? '', 'patient') && (
         <View>
+          <Text style={commonStyles.subHeading}>Top Doctors</Text>
+
           <FlatList
             //@ts-ignore
             data={allDoctorsList?.data || []}

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useRouter } from 'expo-router';
@@ -19,6 +20,7 @@ const index = () => {
       <View style={styles.container}>
         <Text>Welcome to Appointments</Text>
         <Text>Book your appointment in 2 minutes</Text>
+        <Button onPress={() => router.replace('/home')}>Home</Button>
       </View>
     </SafeAreaView>
   );
